@@ -1,13 +1,5 @@
 # ingestion-gateway project
 
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./gradlew quarkusDev
-```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
 
@@ -18,39 +10,42 @@ The application can be packaged using:
 It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./gradlew build -Dquarkus.package.type=uber-jar
-```
 
 The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
 
-## Creating a native executable
+## Load testing
+I used https://github.com/nakabonne/ali to do generate load.
 
-You can create a native executable using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native
+Install ali in mac: 
+```
+brew install nakabonne/ali/ali
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+## Run the load test
 ```
+ali --rate=500 --duration=5m --body-file=quarkus-ingestion-gateway/load-test-data/400k --method=POST http://localhost:8080/events
+```
+I have commited the a 400k file in load-test-data
 
-You can then execute your native executable with: `./build/ingestion-gateway-0.0.1-runner`
+## Steps to run
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
+* checkout https://github.com/anaray/quarkus-ingestion-gateway.git (Quarkus app)
+* ./gradlew clean build -x test
+* java -jar build/quarkus-app/quarkus-run.jar 
+* checkout https://github.com/anaray/test-gateway-service.git (downstream test app)
+* ./gradlew clean build -x test
+* java -jar build/libs/test-gateway-0.0.1-SNAPSHOT.jar
+* To generate load - ```ali --rate=500 --duration=5m --body-file=quarkus-ingestion-gateway/load-test-data/400k --method=POST http://localhost:8080/events```
+* At some point the quarkus-ingestion-gateway would throw
+  ```
+  java.lang.IllegalStateException: SRMSG00034: Insufficient downstream requests to emit item
+  	at io.smallrye.reactive.messaging.extension.ThrowingEmitter.emit(ThrowingEmitter.java:60)
+  	at io.smallrye.reactive.messaging.extension.AbstractEmitter.emit(AbstractEmitter.java:146)
+  	at io.smallrye.reactive.messaging.extension.EmitterImpl.send(EmitterImpl.java:29)
+  ```
+ 
+  
+ 
 
-# Quarkus  
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
-
-## Related guides
-
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- SmallRye Reactive Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka)): Connect to Kafka with Reactive Messaging
-- SmallRye Fault Tolerance ([guide](https://quarkus.io/guides/microprofile-fault-tolerance)): Define fault-tolerant services
-- SmallRye Health ([guide](https://quarkus.io/guides/microprofile-health)): Monitor service health
-- Kubernetes ([guide](https://quarkus.io/guides/kubernetes)): Generate Kubernetes resources from annotations
 

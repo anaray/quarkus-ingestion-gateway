@@ -14,7 +14,7 @@ Be aware that it’s not an _über-jar_ as the dependencies are copied into the 
 The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
 
 ## Load testing
-I used https://github.com/nakabonne/ali to do generate load.
+I used https://github.com/nakabonne/ali to generate load.
 
 Install ali in mac: 
 ```

@@ -27,7 +27,7 @@ ali --rate=500 --duration=5m --body-file=quarkus-ingestion-gateway/load-test-dat
 ```
 I have commited the a 400k file in load-test-data
 
-## Steps to run
+## Steps to recreate issue
 
 * checkout https://github.com/anaray/quarkus-ingestion-gateway.git (Quarkus app)
 * ./gradlew clean build -x test

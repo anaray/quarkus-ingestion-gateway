@@ -13,9 +13,9 @@ import javax.ws.rs.core.Application;
                 title = "Ingestion Gateway - Metrics",
                 version = "0.0.1",
                 contact = @Contact(
-                        name = "dpoe",
-                        url = "http://workday.com/contact",
-                        email = "<dpoesupport>@workday.com"))
+                        name = "anaray",
+                        url = "https://github.com/anaray/quarkus-ingestion-gateway",
+                        email = ""))
 )
-public class IngestionGatewayApplication extends Application {
+public class EventsGatewayApplication extends Application {
 }

@@ -25,7 +25,7 @@ brew install nakabonne/ali/ali
 ```
 ali --rate=500 --duration=5m --body-file=quarkus-ingestion-gateway/load-test-data/400k --method=POST http://localhost:8080/events
 ```
-I have commited the a 400k file in load-test-data
+I have committed a 400k file in load-test-data
 
 ## Steps to recreate issue
 
